@@ -1,25 +1,25 @@
 require('dotenv').config();
 const express= require('express');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken');
 const cookieParser = require("cookie-parser");
 const cors= require('cors');
 const port = process.env.PORT || 7777;
-
 const app= express();
 
 app.use(express.json())
 app.use(cookieParser());
 app.use(cors(
     {
-        origin:['http://localhost:5173','https://task-management-76054.web.app'],
+        origin:['https://task-management-76054.web.app'],
         credentials:true
     }
 ))
 
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-// const { Socket } = require('dgram');
-const uri =`mongodb+srv://${process.env.UserINFO}:${process.env.UserPass}@cluster0.u87dt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+
+const uri =`mongodb+srv://${process.env.UserINF}:${process.env.UserPass}@cluster0.u87dt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -93,15 +93,16 @@ async function run() {
         res.send(result)
   
       })
- app.get('/alltask/:email',varifytoken,async(req,res)=>{
+ app.get('/alltask/:email',async(req,res)=>{
   const Email=req.params.email;
+  console.log()
   const query={email:Email};
   const result= await AllTask.find(query).toArray();
   // console.log('all task',result)
   res.send(result)
  }) 
  
- app.put('/categoryUpdate',varifytoken,async(req,res)=>{
+ app.put('/categoryUpdate',async(req,res)=>{
   const data= req.body;
   const query= {_id:new ObjectId(data?.categoryId)}
   const update={
@@ -114,7 +115,7 @@ async function run() {
   res.send(result)
  })
 
- app.put('/taskEdit/:id',varifytoken,async(req,res)=>{
+ app.put('/taskEdit/:id',async(req,res)=>{
   const Id=req.params.id;
   const title=req.body.title;
   // console.log(Id,title)
@@ -128,7 +129,7 @@ async function run() {
   // console.log(result)
   res.send(result)
  })
- app.delete('/taskDelete/:id',varifytoken,async(req,res)=>{
+ app.delete('/taskDelete/:id',async(req,res)=>{
   const Id=req.params.id;
   console.log('delete id',Id)
   const query= {_id:new ObjectId(Id)}
@@ -153,5 +154,4 @@ app.listen(port,()=>{
     console.log('you server is runing')
 })
 
-// task-management
-//Cz4atARpYKXzGhv7
+
